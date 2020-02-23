@@ -1,30 +1,25 @@
 const products = require("../../db/products/all-products.json");
-const qs = require("querystring");
+// const qs = require("querystring");
 
 const categorySearcher = (request, response) => {
   let productsArrayForSearchResult = [];
   let searchResult;
 
-  const categoryObj = qs.parse(request.url);
-  const categoryStringFromUrl = Object.values(categoryObj)[0];
-  const categoryFirstIndex = categoryStringFromUrl.indexOf('"');
-  const categoryLastIndex = categoryStringFromUrl.lastIndexOf('"');
-  const categoryValue = categoryStringFromUrl.slice(
-    categoryFirstIndex + 1,
-    categoryLastIndex
-  );
+  let query = require("url").parse(request.url);
+  let querySplit = query.search.toString().split("=");
+  categoryValue = querySplit[1];
 
-  const productsFilter = products.filter(
+  const productsFiltered = products.filter(
     item => item.categories[0] === categoryValue
   );
 
-  if (productsFilter.length === 0) {
+  if (productsFiltered.length === 0) {
     searchResult = {
       status: "no products",
       products: []
     };
   } else {
-    productsFilter.map(item => {
+    productsFiltered.map(item => {
       const itemObj = {
         id: item.id,
         sku: item.sku,

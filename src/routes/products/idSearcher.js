@@ -5,10 +5,10 @@ const idSearcher = (request, response) => {
   const urlObj = url.parse(request.url);
   console.log("urlObj :", urlObj);
   const idFromPath = getIdFromPath(urlObj.path);
-  const idProd = products.filter(el => el.id === Number(idFromPath));
+  const idProd = products.find(el => el.id === Number(idFromPath));
   let foundedProducts;
 
-  if (idProd.length === 0 || !idProd) {
+  if (idProd.length === 0) {
     foundedProducts = {
       status: "no products",
       products: []
